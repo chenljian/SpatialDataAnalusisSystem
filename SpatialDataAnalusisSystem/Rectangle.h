@@ -6,18 +6,21 @@ class Rect : public Shape {
 	double area;
 	static int count;
 public:
-	Rect() : lp(0, 0), rp(0, 0) { count++; }
-	Rect(Point plp, Point prp) :lp(plp), rp(prp) { count++; }
+	Rect() : lp(0, 0), rp(0, 0) { Rect::count++; }
+	Rect(Point plp, Point prp) :lp(plp), rp(prp) { Rect::count++; }
 	Rect(const Rect&);
-	~Rect() { count--; }
+	~Rect() { Rect::count--; }
 
 	virtual float Area(); //
 	virtual void WriteToFile(ofstream& o);
 	static int GetCount() { return count; }
 
 	int setLp(const Point&);
+	const Point& getLp() const;
 	int setRp(const Point&);
+	const Point& getRp() const;
 	void setArea(const float a) { area = a; }
+	double getArea() const { return area; }
 	float Distance(const Rect&);
 
 	friend ostream& operator<<(ostream&, const Rect&);

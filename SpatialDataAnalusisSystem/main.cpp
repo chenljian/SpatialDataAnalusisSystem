@@ -10,7 +10,11 @@ int readLineFromFile(vector<Line>&, ifstream&);
 int readRectFromFile(vector<Rect>&, ifstream&);
 void WriteData(Shape*, ofstream&);
 
-void main(int argc, char* argv[])
+int Point::count = 0;
+int Line::count = 0;
+int Rect::count = 0;
+
+int main(int argc, char* argv[])
 {
 	vector<Point> pointVector;
 	vector<Line> lineVector;
@@ -19,12 +23,15 @@ void main(int argc, char* argv[])
 
 	ifstream pointInFile("point.txt");
 	readPointFromFile(pointVector, pointInFile);
+	pointInFile.close();
 
 	ifstream lineInFile("line.txt");
 	readLineFromFile(lineVector, lineInFile);
+	lineInFile.close();
 
 	ifstream rectInFile("rect.txt");
 	readRectFromFile(rectVector, rectInFile);
+	rectInFile.close();
 
 	//任务3， 遍历所有数据，找出最大最小
 	auto maxArea = rectVector.begin();
@@ -40,6 +47,7 @@ void main(int argc, char* argv[])
 	ofstream minAndMaxRect("Rect_data.txt");
 	minAndMaxRect << *minArea;
 	minAndMaxRect << *maxArea;
+	minAndMaxRect.close();
 
 	auto maxLength = lineVector.begin();
 	auto minLength = lineVector.begin();
@@ -47,13 +55,14 @@ void main(int argc, char* argv[])
 	while (lineIterator != lineVector.end()) {
 		if (lineIterator->Area() > maxLength->Area())
 			maxLength = lineIterator;
-		else if (lineIterator->Area < minArea->Area())
+		else if (lineIterator->Area() < minArea->Area())
 			minLength = lineIterator;
 		lineIterator++;
 	}
 	ofstream minAndMaxLine("Line_data.txt");
 	minAndMaxLine << *minLength;
 	minAndMaxLine << *maxLength;
+	minAndMaxLine.close();
 
 	//任务四
 	cout << endl << "********现在演示任务 4**********" << endl;
@@ -82,39 +91,45 @@ void main(int argc, char* argv[])
 		it->lowerDes();
 	}
 	sort(pointVector.begin(), pointVector.end());
-
 	ofstream pointOutFile("Point2.txt");
-	for (int i = 0; i < pointVector.size; i++) {
+	for (unsigned i = 0; i < pointVector.size(); i++) {
 
 		Shape* outShape = &pointVector[i];
 		WriteData(outShape, pointOutFile);
+		pointOutFile << endl;
 	}
+	pointOutFile.close();
 
 	sort(rectVector.begin(), rectVector.end());
 	ofstream rectOutFile("Rect2.txt");
-	for (int i = 0; i < rectVector.size; i++) {
+	for (unsigned i = 0; i < rectVector.size(); i++) {
 
 		Shape* outShape = &rectVector[i];
 		WriteData(outShape, rectOutFile);
+		rectOutFile << endl;
 	}
+	rectOutFile.close();
 
 	sort(lineVector.begin(), lineVector.end());
 	ofstream lineOutFile("Line2.txt");
-	for (int i = 0; i < lineVector.size; i++) {
+	for (unsigned i = 0; i < lineVector.size(); i++) {
 		Shape* outShape = &lineVector[i];
 		WriteData(outShape, lineOutFile);
+		lineOutFile << endl;
 	}
-	
+	lineOutFile.close();
+	system("pause");
 	//end
 }
 
 int readPointFromFile(vector<Point>& pointVec, ifstream& in_file) {
 	int id;
-	float x, y;
+	float x, y, hole;
 	string des;
-	while (!in_file.end)
+	while (!in_file.fail())
 	{
-		in_file >> id >> x >> y >> des;
+		in_file >> id >> x >> y >>hole >> des;
+		if (in_file.fail())	break;
 		Point pointObj(x, y);
 		pointObj.setID(id);
 		pointObj.setDes(des);
@@ -125,15 +140,17 @@ int readPointFromFile(vector<Point>& pointVec, ifstream& in_file) {
 int readLineFromFile(vector<Line>& lineVec, ifstream& in_file) {
 	int id;
 	float x, y, len;
-	while (!in_file.end) {
+	while (!in_file.fail()) {
 		in_file >> id;
 		in_file >> x >> y;
 		Point point1(x, y);
 		in_file >> x >> y;
 		Point point2(x, y);
 		Line lineObj(point1, point2);
+		lineObj.setID(id);
 		in_file >> len;
 		lineObj.setLen(len);
+		if (in_file.fail())	break;
 		lineVec.push_back(lineObj);
 	}
 	return 1;
@@ -141,17 +158,21 @@ int readLineFromFile(vector<Line>& lineVec, ifstream& in_file) {
 int readRectFromFile(vector<Rect>& rectVec, ifstream& in_file) {
 	int id;
 	float x, y, area;
-	while (!in_file.end) {
+	string hole;
+	while (!in_file.fail()) {
 		in_file >> id;
 		in_file >> x >> y;
 		Point point1(x, y);
 		in_file >> x >> y;
 		Point point2(x, y);
-		in_file >> area;
+		in_file >> area >> hole;
+		if (in_file.fail())	break;
 		Rect rectObj(point1, point2);
 		rectObj.setID(id);
 		rectObj.setArea(area);
+		rectVec.push_back(rectObj);
 	}
+	return 1;
 }
 
 void WriteData(Shape* s, ofstream& out_file) {

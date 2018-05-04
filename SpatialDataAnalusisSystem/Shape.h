@@ -1,6 +1,6 @@
 #pragma once
 #include <iostream>
-#include <String>
+#include <string>
 using namespace std;
 class Shape {
 	int obj_id;	//object identity
@@ -9,9 +9,9 @@ public:
 	virtual float Area() = 0;
 	virtual void WriteToFile(ofstream &o) = 0;
 
-	int setDes(const string str) { des = str; }
-	string getDes() { return des; }
+	void setDes(const string str) { des = str; }
+	string getDes() const { return des; }
 
-	int setID(const int id) { obj_id = id; }
-	int getID() { return obj_id; } 
+	void setID(const int id) { obj_id = id; }
+	int getID() const { return obj_id; } 
 };

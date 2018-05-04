@@ -9,8 +9,9 @@ Line::Line(Point &point1, Point &point2):p1(point1),p2(point2)
 	count++;
 }
 
-Line::Line(Line &line)
+Line::Line(const Line &line)
 {
+	setID(line.getID());
 	p1 = line.p1;
 	p2 = line.p2;
 	len = line.len;
@@ -20,18 +21,12 @@ Line::Line(Line &line)
 float Line::Area()
 {
 	len = sqrt(pow(p1.x - p2.x, 2) + pow(p1.y - p2.y, 2));
-	return len;
+	return (float)len;
 }
 
 void Line::WriteToFile(ofstream & o)
 {
-	//o << this->getID() << " ";
-	//Point point = this->getP1();
-	//o << point.getX() << " " << point.getY() << " ";
-	//point = this->getP2();
-	//o << point.getX() << " " << point.getY() << " ";
-	//o << this->len;
-	o << this;
+	o << *this;
 }
 
 void Line::setP1(const Point &point)
@@ -62,12 +57,13 @@ double Line::getLen() const
 ostream & operator<<(ostream &o, const Line &line)
 {
 	// TODO: 在此处插入 return 语句
-	o << line.getID << " ";
+	o << line.getID() << " ";
 	Point point = line.getP1();
 	o << point.getX() <<" "<< point.getY() << " ";
 	point = line.getP2();
 	o << point.getX() <<" "<< point.getY() << " ";
 	o << line.len;
+	return o;
 }
 
 bool operator<(const Line &line1, const Line &line2)

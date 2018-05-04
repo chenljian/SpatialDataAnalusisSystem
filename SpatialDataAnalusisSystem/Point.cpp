@@ -1,10 +1,22 @@
 #include "Point.h"
 #include <fstream>
 #include <algorithm>
-
-void Point::WriteToFile(ofstream & o)
+#include "Rectangle.h"
+#include "Line.h"
+Point::Point(const Point &p)
 {
-	o << *this;
+	setID(p.getID());
+	x = p.x;
+	y = p.y;
+	setDes(p.getDes());
+	count++;
+}
+void Point::WriteToFile(ofstream & os)
+{
+//	os << this->getID() << " ";
+//	os << this->x << " " << this->y << " ";
+//	os << this->getDes();
+	os << *this;
 }
 
 float Point::Distance(const Point &point) const
@@ -71,7 +83,7 @@ int Point::lowerDes()
 
 ostream& operator<<(ostream& os, const Point& point)
 {
-	os << point.getID << " ";
+	os << point.getID() << " ";
 	os << point.x << " " << point.y << " ";
 	os << point.getDes();
 	return os;
@@ -80,7 +92,7 @@ ostream& operator<<(ostream& os, const Point& point)
 
 bool operator<(const Point &point1, const Point &point2)
 {
-	if (point1.getDes() < point2.getDes)
+	if (point1.getDes() < point2.getDes())
 		return true;
 	else
 		return false;
@@ -89,5 +101,6 @@ bool operator<(const Point &point1, const Point &point2)
 Point operator+(const Point &point1, const Point &point2)
 {
 	Point newPoint(point1.x + point2.x, point1.y + point2.y);
+	newPoint.setID(max(point1.getID(), point2.getID()) + 1);
 	return newPoint;
 }
