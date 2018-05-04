@@ -3,6 +3,7 @@
 #include "Point.h"
 #include "Line.h"
 #include "Rectangle.h"
+#include <algorithm>
 
 int readPointFromFile(vector<Point>&, ifstream&);
 int readLineFromFile(vector<Line>&, ifstream&);
@@ -77,15 +78,82 @@ void main(int argc, char* argv[])
 
 	//排序并写入文件
 	cout << endl << "********现在演示任务 6**********" << endl;
+	for (auto it = pointVector.begin(); it != pointVector.end(); it++){
+		it->lowerDes();
+	}
+	sort(pointVector.begin(), pointVector.end());
 
+	ofstream pointOutFile("Point2.txt");
+	for (int i = 0; i < pointVector.size; i++) {
 
+		Shape* outShape = &pointVector[i];
+		WriteData(outShape, pointOutFile);
+	}
 
+	sort(rectVector.begin(), rectVector.end());
+	ofstream rectOutFile("Rect2.txt");
+	for (int i = 0; i < rectVector.size; i++) {
 
+		Shape* outShape = &rectVector[i];
+		WriteData(outShape, rectOutFile);
+	}
 
-			
+	sort(lineVector.begin(), lineVector.end());
+	ofstream lineOutFile("Line2.txt");
+	for (int i = 0; i < lineVector.size; i++) {
+		Shape* outShape = &lineVector[i];
+		WriteData(outShape, lineOutFile);
+	}
+	
+	//end
 }
 
-int readPointFromFile(vector<Point>& pointVec, ifstream& in_file) {}
-int readLineFromFile(vector<Line>&, ifstream&) {}
-int readRectFromFile(vector<Rect>&, ifstream&) {}
-void WriteData(Shape* s, ofstream& out_file) {}
+int readPointFromFile(vector<Point>& pointVec, ifstream& in_file) {
+	int id;
+	float x, y;
+	string des;
+	while (!in_file.end)
+	{
+		in_file >> id >> x >> y >> des;
+		Point pointObj(x, y);
+		pointObj.setID(id);
+		pointObj.setDes(des);
+		pointVec.push_back(pointObj);
+	}
+	return 1;
+}
+int readLineFromFile(vector<Line>& lineVec, ifstream& in_file) {
+	int id;
+	float x, y, len;
+	while (!in_file.end) {
+		in_file >> id;
+		in_file >> x >> y;
+		Point point1(x, y);
+		in_file >> x >> y;
+		Point point2(x, y);
+		Line lineObj(point1, point2);
+		in_file >> len;
+		lineObj.setLen(len);
+		lineVec.push_back(lineObj);
+	}
+	return 1;
+}
+int readRectFromFile(vector<Rect>& rectVec, ifstream& in_file) {
+	int id;
+	float x, y, area;
+	while (!in_file.end) {
+		in_file >> id;
+		in_file >> x >> y;
+		Point point1(x, y);
+		in_file >> x >> y;
+		Point point2(x, y);
+		in_file >> area;
+		Rect rectObj(point1, point2);
+		rectObj.setID(id);
+		rectObj.setArea(area);
+	}
+}
+
+void WriteData(Shape* s, ofstream& out_file) {
+	s->WriteToFile(out_file);
+}

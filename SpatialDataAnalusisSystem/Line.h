@@ -8,7 +8,7 @@ class Line : public Shape {
 	static int count;
 public:
 	Line() { count++; }
-	Line(Point, Point);
+	Line(Point&, Point&);
 	Line(Line&);
 	~Line() { count--; }
 
@@ -17,7 +17,10 @@ public:
 	static int GetCount() { return count; }
 
 	void setP1(const Point&);
+	Point& getP1()  const;
 	void setP2(const Point&);
+	Point& getP2() const;
+	void setLen(const float length) { len = length; }
 
 	friend ostream& operator<<(ostream&, const Line&);
 	friend bool operator<(const Line&, const Line&);

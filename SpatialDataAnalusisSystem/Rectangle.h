@@ -3,6 +3,7 @@
 class Rect : public Shape {
 	Point lp;	//Lower left corner
 	Point rp;	//top right corner
+	double area;
 	static int count;
 public:
 	Rect() : lp(0, 0), rp(0, 0) { count++; }
@@ -16,6 +17,7 @@ public:
 
 	int setLp(const Point&);
 	int setRp(const Point&);
+	void setArea(const float a) { area = a; }
 	float Distance(const Rect&);
 
 	friend ostream& operator<<(ostream&, const Rect&);
